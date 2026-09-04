@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    container_name: devops-task-manager
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    environment:
+      APP_NAME: ${APP_NAME:-DevOps Task Manager}
+      APP_ENV: ${APP_ENV:-development}
+      APP_VERSION: ${APP_VERSION:-1.0.0}
+      APP_PORT: 8000
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    restart: unless-stopped
