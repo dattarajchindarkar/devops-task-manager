@@ -1,4 +1,5 @@
 import pytest
+
 from app import create_app
 import app.routes as routes
 
@@ -18,13 +19,11 @@ def client():
     routes.next_task_id = 1
 
 
-def test_home_returns_application_info(client):
+def test_home_returns_web_page(client):
     response = client.get("/")
-    data = response.get_json()
 
     assert response.status_code == 200
-    assert data["application"] == "DevOps Task Manager"
-    assert data["message"] == "Task Manager API is running"
+    assert b"DevOps Task Manager" in response.data
 
 
 def test_health_returns_healthy(client):
@@ -34,26 +33,42 @@ def test_health_returns_healthy(client):
     assert response.get_json()["status"] == "healthy"
 
 
+def test_api_info_returns_application_details(client):
+    response = client.get("/api/info")
+
+    data = response.get_json()
+
+    assert response.status_code == 200
+    assert data["application"] == "DevOps Task Manager"
+
+
 def test_create_task(client):
-    response = client.post("/tasks", json={
-        "title": "Learn Docker",
-        "description": "Understand containers",
-        "priority": "high"
-    })
+    response = client.post(
+        "/tasks",
+        json={
+            "title": "Learn Docker",
+            "description": "Understand containers",
+            "priority": "high"
+        }
+    )
 
     data = response.get_json()
 
     assert response.status_code == 201
     assert data["id"] == 1
     assert data["title"] == "Learn Docker"
+    assert data["priority"] == "high"
     assert data["completed"] is False
 
 
 def test_create_task_rejects_invalid_priority(client):
-    response = client.post("/tasks", json={
-        "title": "Learn Kubernetes",
-        "priority": "urgent"
-    })
+    response = client.post(
+        "/tasks",
+        json={
+            "title": "Learn Kubernetes",
+            "priority": "urgent"
+        }
+    )
 
     assert response.status_code == 400
     assert "priority" in response.get_json()["error"]
@@ -67,15 +82,22 @@ def test_get_missing_task_returns_404(client):
 
 
 def test_update_task(client):
-    create_response = client.post("/tasks", json={
-        "title": "Learn Docker"
-    })
+    create_response = client.post(
+        "/tasks",
+        json={
+            "title": "Learn Docker"
+        }
+    )
+
     task_id = create_response.get_json()["id"]
 
-    response = client.put(f"/tasks/{task_id}", json={
-        "completed": True,
-        "priority": "medium"
-    })
+    response = client.put(
+        f"/tasks/{task_id}",
+        json={
+            "completed": True,
+            "priority": "medium"
+        }
+    )
 
     data = response.get_json()
 
@@ -85,12 +107,19 @@ def test_update_task(client):
 
 
 def test_delete_task(client):
-    create_response = client.post("/tasks", json={
-        "title": "Temporary task"
-    })
+    create_response = client.post(
+        "/tasks",
+        json={
+            "title": "Temporary task"
+        }
+    )
+
     task_id = create_response.get_json()["id"]
 
     response = client.delete(f"/tasks/{task_id}")
 
     assert response.status_code == 204
-    assert client.get(f"/tasks/{task_id}").status_code == 404
+
+    get_response = client.get(f"/tasks/{task_id}")
+
+    assert get_response.status_code == 404

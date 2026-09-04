@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ app_name }}</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+
+        <div>
+            <p class="eyebrow">DEVOPS PROJECT</p>
+
+            <h1>{{ app_name }}</h1>
+
+            <p class="subtitle">
+                Simple REST API with containerized deployment
+            </p>
+        </div>
+
+        <div class="status">
+            <span id="health-dot" class="status-dot"></span>
+
+            <span id="health-text">
+                Checking API...
+            </span>
+        </div>
+
+    </header>
+
+
+    <!-- Application information -->
+    <section class="info-grid">
+
+        <div class="info-card">
+            <span>Environment</span>
+            <strong>{{ environment }}</strong>
+        </div>
+
+        <div class="info-card">
+            <span>Version</span>
+            <strong>{{ version }}</strong>
+        </div>
+
+        <div class="info-card">
+            <span>Total Tasks</span>
+            <strong id="task-count">0</strong>
+        </div>
+
+    </section>
+
+
+    <!-- Create task -->
+    <section class="create-section">
+
+        <div class="section-header">
+
+            <div>
+                <h2>Create Task</h2>
+
+                <p>
+                    Add a task to your development workflow.
+                </p>
+            </div>
+
+        </div>
+
+
+        <form id="task-form">
+
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label for="title">Title</label>
+
+                    <input
+                        id="title"
+                        type="text"
+                        placeholder="e.g. Learn Docker"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="priority">
+                        Priority
+                    </label>
+
+                    <select id="priority">
+
+                        <option value="low">
+                            Low
+                        </option>
+
+                        <option value="medium" selected>
+                            Medium
+                        </option>
+
+                        <option value="high">
+                            High
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    placeholder="Describe the task..."
+                    rows="3"
+                ></textarea>
+
+            </div>
+
+
+            <button type="submit" class="primary-button">
+                + Create Task
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- Tasks -->
+    <section class="tasks-section">
+
+        <div class="section-header">
+
+            <div>
+                <h2>Tasks</h2>
+
+                <p>
+                    Manage your current development tasks.
+                </p>
+            </div>
+
+            <button
+                id="refresh-button"
+                class="secondary-button"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div id="task-list" class="task-list">
+
+            <div class="empty-state">
+                Loading tasks...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <span>
+            API: <strong id="footer-health">Checking...</strong>
+        </span>
+
+        <span>
+            Flask • Gunicorn • Docker
+        </span>
+
+    </footer>
+
+</div>
+
+
+<script
+    src="{{ url_for('static', filename='app.js') }}"
+></script>
+
+</body>
+</html>
