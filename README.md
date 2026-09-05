@@ -1,24 +1,10 @@
-# DevOps Task Manager API
+# DevOps Task Manager
 
-A small Flask REST API designed as the application component of a DevOps assignment.
+A simple Flask-based Task Manager application created to demonstrate practical DevOps concepts including automated testing, Docker containerization, GitHub Actions CI/CD, Kubernetes deployment, and AWS deployment.
 
-The application provides task management endpoints, configuration through environment variables, structured logging, automated tests, and a health endpoint that can later be used by Docker and Kubernetes health checks.
+The application is intentionally simple because the main focus is on the DevOps implementation rather than application complexity.
 
-## Features
-
-- REST API for task management
-- `GET /` application information
-- `GET /health` health check
-- Create, read, update and delete tasks
-- Request validation
-- Environment-based configuration
-- Application logging
-- Automated tests with pytest
-- Gunicorn application server
-- Docker-ready
-- Runs as a non-root container user
-
-## Tech Stack
+## Technology Stack
 
 - Python 3.12
 - Flask
@@ -26,6 +12,36 @@ The application provides task management endpoints, configuration through enviro
 - Pytest
 - Docker
 - Docker Compose
+- GitHub Actions
+- Kubernetes
+- Kind
+- Amazon ECR
+- Amazon EC2
+- AWS IAM
+
+## Application Features
+
+The application provides a simple interface for creating and managing tasks.
+
+Each task contains:
+
+- Title
+- Description
+- Priority
+- Completion status
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/` | Task Manager web interface |
+| GET | `/health` | Application health check |
+| GET | `/api/info` | Application information |
+| GET | `/tasks` | Get all tasks |
+| POST | `/tasks` | Create a task |
+| GET | `/tasks/<id>` | Get a task |
+| PUT | `/tasks/<id>` | Update a task |
+| DELETE | `/tasks/<id>` | Delete a task |
 
 ## Project Structure
 
@@ -33,225 +49,37 @@ The application provides task management endpoints, configuration through enviro
 devops-task-manager/
 ├── app/
 │   ├── __init__.py
-│   └── routes.py
+│   ├── routes.py
+│   ├── templates/
+│   │   └── index.html
+│   └── static/
+│       ├── app.js
+│       └── style.css
 ├── tests/
 │   ├── __init__.py
 │   └── test_api.py
-├── run.py
-├── requirements.txt
+├── k8s/
+│   ├── configmap.yaml
+│   ├── deployment.yaml
+│   └── service.yaml
+├── docs/
+│   ├── linux-networking.md
+│   └── aws-deployment.md
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── Dockerfile
 ├── docker-compose.yml
 ├── .dockerignore
 ├── .env.example
 ├── .gitignore
+├── requirements.txt
+├── run.py
 └── README.md
-```
+ Author
 
-## Configuration
+DevOps Task Manager
 
-Copy the example environment file:
+Repository:
 
-```bash
-cp .env.example .env
-```
-
-Available configuration:
-
-```text
-APP_NAME=DevOps Task Manager
-APP_ENV=development
-APP_VERSION=1.0.0
-APP_PORT=8000
-LOG_LEVEL=INFO
-```
-
-Do not commit `.env` or other secrets to Git.
-
-## Run Locally
-
-Create a virtual environment:
-
-```bash
-python -m venv .venv
-```
-
-Activate it on Windows PowerShell:
-
-```powershell
-.venv\Scripts\Activate.ps1
-```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Run the application:
-
-```bash
-python run.py
-```
-
-The API will be available at:
-
-```text
-http://localhost:8000
-```
-
-## API Endpoints
-
-### Application information
-
-```http
-GET /
-```
-
-### Health check
-
-```http
-GET /health
-```
-
-Example response:
-
-```json
-{
-  "status": "healthy",
-  "application": "DevOps Task Manager"
-}
-```
-
-### List tasks
-
-```http
-GET /tasks
-```
-
-### Get a task
-
-```http
-GET /tasks/1
-```
-
-### Create a task
-
-```http
-POST /tasks
-Content-Type: application/json
-```
-
-Example:
-
-```json
-{
-  "title": "Learn Docker",
-  "description": "Understand containers",
-  "priority": "high"
-}
-```
-
-### Update a task
-
-```http
-PUT /tasks/1
-Content-Type: application/json
-```
-
-Example:
-
-```json
-{
-  "completed": true
-}
-```
-
-### Delete a task
-
-```http
-DELETE /tasks/1
-```
-
-## Run Tests
-
-```bash
-pytest
-```
-
-The test suite covers:
-
-- Application endpoint
-- Health endpoint
-- Task creation
-- Input validation
-- Missing resources
-- Task updates
-- Task deletion
-
-## Run with Docker
-
-Build the image:
-
-```bash
-docker build -t devops-task-manager .
-```
-
-Run the container:
-
-```bash
-docker run --env-file .env -p 8000:8000 devops-task-manager
-```
-
-Or use Docker Compose:
-
-```bash
-docker compose up --build
-```
-
-Stop the application:
-
-```bash
-docker compose down
-```
-
-View logs:
-
-```bash
-docker compose logs -f
-```
-
-## Data Storage
-
-The current version intentionally uses in-memory storage.
-
-This keeps the application focused on the DevOps assignment rather than database administration.
-
-Because data is stored in memory, tasks are lost when the application process/container restarts.
-
-A persistent database can be introduced later if required.
-
-## DevOps Roadmap
-
-The application is the first stage of the project.
-
-```text
-Application
-    ↓
-Automated Tests
-    ↓
-Docker
-    ↓
-GitHub Actions
-    ↓
-Kubernetes
-    ↓
-Amazon ECR
-    ↓
-Amazon ECS
-    ↓
-Application Load Balancer
-    ↓
-CloudWatch
-```
-
-The infrastructure and deployment stages will be added incrementally after the application and container are verified.
+https://github.com/dattarajchindarkar/devops-task-manager

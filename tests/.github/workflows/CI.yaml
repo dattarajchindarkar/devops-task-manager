@@ -9,7 +9,7 @@ on:
       - main
 
 permissions:
-  id-token: write
+  id-token: writecurl http://localhost:8000/healthTest-NetConnection 18.215.149.239 -Port 8000
   contents: read
 
 env:
