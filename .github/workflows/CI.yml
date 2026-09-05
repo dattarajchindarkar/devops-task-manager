@@ -14,7 +14,7 @@ permissions:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: devops-task-manager
+  ECR_REPOSITORY: task-app-ecr
 
 jobs:
   test-and-build:
